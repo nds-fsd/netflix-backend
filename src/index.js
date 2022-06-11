@@ -1,10 +1,10 @@
 const express = require("express");
-const mongo = require("mongoose");
+const mongo = require('./mongo')
 const dotenv = require("dotenv");
 const cors = require("cors");
 const PORT = 3001;
 
-dotenv.config(); // load .env file
+
 const app = express();
 app.use(express.json());
 

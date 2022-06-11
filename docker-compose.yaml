@@ -4,10 +4,9 @@ services:
   mongo:
     image: mongo
     restart: always
-    env_file: .env
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: teamnetflix
+      MONGO_INITDB_ROOT_PASSWORD: nuclio
       MONGO_DATABASE_NAME: app
     ports:
       - "27022:27017"
