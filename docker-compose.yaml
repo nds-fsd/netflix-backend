@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: netflix1
+      MONGO_INITDB_ROOT_PASSWORD: netflix1
+      MONGO_DATABASE_NAME: prj3
+    ports:
+      - '27017:27017'

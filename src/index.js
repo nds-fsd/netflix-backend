@@ -1,17 +1,14 @@
-const mongoose = require('mongoose')
 const express = require('express')
+const mongoose = require('mongoose')
+const projectRoutes = require('./routes/moviesRoutes.js')
 const cors = require('cors')
-const dotenv = require('dotenv')
-
-const projectRoutes = require('./routes/projectRoutes')
-const bodyParser = require('body-parser')
 
 const app = express()
-const PORT = 3001
+app.use(express.json())
 
-//!--> Connection String to MongoDB user: netflix / password: netflix / db name: proj-mng <--
+//!--> Connection String to MongoDB user: netflix1 / password: netflix1 / replace host by localhost and port by 27017/ db name: prj3 <--
 const dbURI =
-  'mongodb+srv://netflix:netflix@cluster0.wqxvqva.mongodb.net/proj-mng?retryWrites=true&w=majority'
+  'mongodb://netflix1:netflix1@localhost:27017/prj3?authSource=admin'
 
 //* Mongoose module to connect to our database:
 mongoose
@@ -19,24 +16,14 @@ mongoose
   .then(function (result) {
     console.log('Database is connected')
   })
-  .catch((err) => console.log(err))
+  .catch((error) => console.log(error))
 
-//! const dotenv = require('dotenv')
-//! dotenv.config
-
-//* enable cors
+app.use(projectRoutes)
 app.use(cors())
 
-app.get('/', (request, response) => response.send('Hello from the other side!'))
+app.get('/', (req, res) => res.send('Hello from homepage.'))
 
+const PORT = 8080
 app.listen(PORT, () => {
   console.log(`Server is listening on port: http://localhost:${PORT}`) // print to console when server is running
 })
-
-/**
- * ! Parses the text as JSON and exposes teh resulting obj on req.body
- * * bodyParser.json(options)
- * */
-
-app.use(bodyParser.json())
-app.use('projects', projectRoutes)
