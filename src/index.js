@@ -3,7 +3,7 @@ const app = express();
 const MovieRouter = require('./routes/MovieRoutes');
 const cors = require('cors')
 const mongo = require('./mongo')
-const PORT = 8080
+const PORT = 8000
 
 app.use(cors())
 app.use(express.json())

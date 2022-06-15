@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://netflix1:netflix1@localhost:27017/prj3?authSource=admin');
+mongoose.connect('mongodb+srv://netflix1:netflix1@cluster0.tgnkat0.mongodb.net/?retryWrites=true&w=majority');
 
 const mongo = mongoose.connection;
 mongo.on('error', (error) => console.error(error));
