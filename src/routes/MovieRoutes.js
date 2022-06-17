@@ -1,6 +1,5 @@
 const express = require('express');
-const res = require('express/lib/response');
-const Movie = require('../mongo/schemas/prjSchemaMovie');
+const Movie = require('../mongo/schemas/movie');
 
 
 
@@ -43,7 +42,7 @@ MovieRouter.post('/', async (request, response) => {
     const newMovie = new Movie(request.body)
     try {
         await newMovie.save()
-        response.send(newMovie)
+        response.json(newMovie)
     } catch (error) {
         response.status(500).json(error)
     }
@@ -67,9 +66,11 @@ MovieRouter.delete('/:id', async (request, response) => {
 // · PUT!
 MovieRouter.patch('/:id', async (request, response) => {
     try {
-        await Movie.findByIdAndUpdate(request.params.id, request.body)
-        await Movie.save()
-        response.json(movie)
+        const movie = await Movie.findByIdAndUpdate(request.params.id, request.body, {new: true});
+        if(!movie){
+            response.status(404).send('No item found')
+        }
+        response.status(200).json(movie)
     } catch (error) {
         response.status(500).json(error)
     }
