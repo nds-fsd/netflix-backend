@@ -58,9 +58,7 @@ authRouter.post('/login', async(request, response) =>{
                 email: user.email,
                 name: user.name
             }
-        })
-
-       
+        })       
     }
     catch(err){
         return response.status(500).json({
