@@ -1,4 +1,4 @@
-const jwtMiddleware = require('express-jwt');
+const {expressjwt} = require('express-jwt');
 const express = require('express');
 require('dotenv').config();
 const jwtSecret = process.env.JWT_SECRET;
@@ -8,10 +8,10 @@ const { response } = require('express');
 
 const authRouter = express.Router();
 
-authRouter.post('/register', async(request, response) =>{
-    try{
-        const emailExist = await User.findOne({email: request.body.email})
-        if(emailExist){
+authRouter.post('/register', async (request, response) => {
+    try {
+        const emailExist = await User.findOne({ email: request.body.email })
+        if (emailExist) {
             return response.status(400).json({
                 error: "Email already exist"
             })
@@ -30,7 +30,7 @@ authRouter.post('/register', async(request, response) =>{
             }
         })
     }
-    catch(err){
+    catch (err) {
         return response.status(500).json({
             error: err.message
         })
@@ -38,17 +38,16 @@ authRouter.post('/register', async(request, response) =>{
 });
 
 
-authRouter.post('/login', async(request, response) =>{
-    try{
-        const {email, password} = request.body;
-        const user = await User.findOne({email});
-        if(!user) {
-            return response.status(404).json({message: 'User does not exist'}) 
+authRouter.post('/login', async (request, response) => {
+    try {
+        const { email, password } = request.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return response.status(404).json({ message: 'User does not exist' })
         }
-
         const result = await user.comparePassword(password);
-        if(!result) {
-            return response.status(400).json({message: 'Incorrect Password'});
+        if (!result) {
+            return response.status(400).json({ message: 'Incorrect Password' });
         }
         const token = user.generateJWT();
         return response.status(200).json({
@@ -58,9 +57,9 @@ authRouter.post('/login', async(request, response) =>{
                 email: user.email,
                 name: user.name
             }
-        })       
+        })
     }
-    catch(err){
+    catch (err) {
         return response.status(500).json({
             error: err.message
         })
@@ -69,10 +68,8 @@ authRouter.post('/login', async(request, response) =>{
 
 
 
-
-
 const jwtMW = (app) => {
-    app.use('/', jwtMiddleware({ secret: jwtSecret, algorithms: ['HS256'] }).unless({
+    app.use('/', expressjwt({ secret: jwtSecret, algorithms: ['HS256'] }).unless({
         path: ['/register', '/login'],
     }));
 }

@@ -15,7 +15,6 @@ MovieRouter.get('/', async (request, response) => {
     }
 })
 
-
 // · GET by /:id!
 MovieRouter.get('/:id', async (request, response, next) => {
     console.log(request.params.id)
@@ -66,8 +65,8 @@ MovieRouter.delete('/:id', async (request, response) => {
 // · PUT!
 MovieRouter.patch('/:id', async (request, response) => {
     try {
-        const movie = await Movie.findByIdAndUpdate(request.params.id, request.body, {new: true});
-        if(!movie){
+        const movie = await Movie.findByIdAndUpdate(request.params.id, request.body, { new: true });
+        if (!movie) {
             response.status(404).send('No item found')
         }
         response.status(200).json(movie)
