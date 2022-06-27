@@ -8,7 +8,7 @@ const {authRouter, jwtMW} = require('./routes/Auth');
 // const {verifyToken} = require('./helpers/verifyToken')
 
 const cors = require('cors')
-const mongo = require('./mongo')
+const {connectDB} = require('./mongo')
 const PORT = process.env.PORT;
 
 app.use(cors())
@@ -18,8 +18,19 @@ app.use('/', authRouter)
 app.use('/movies', MovieRouter)
 app.use('/user', UserRouter)
 
+if(process.env.NODE_ENV !== 'test'){
+  connectDB().then( async (error) => {
+    if(error){
+      console.log(error);
+    }
+  })
+}
 
-
-app.listen(PORT, () => {
-  console.log(`Server is listening on port: http://localhost:${PORT}`) // print to console when server is running
+const server = app.listen(PORT, () => {
+  if (process.env.NODE_ENV !== 'test') {
+  console.log(`Server is listening on port: http://localhost:${PORT}`)
+  }// print to console when server is running
 })
+
+
+module.exports = { app, server };

@@ -12,22 +12,36 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   createDate: { type: Date, default: Date.now },
   updateDate: { type: Date, default: Date.now },
+  role: {
+    type: String,
+    enum: ['ADMIN', 'USER'],
+    default: 'USER',
+    requiere: true
+  }
 })
+
+userSchema.pre('save', function(next){
+	if(!this.isModified('password')) return next();
+	const hash = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
+	this.password = hash;
+	next();
+});
 
 
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password)
 };
 
-userSchema.methods.generateJWT = function (user) {
+const generateJWT = function (user) {
   const today = new Date()
   const expirationDate = new Date()
   expirationDate.setDate(today.getDate() + 60)
 
   let payload = {
-    id: this._id,
-    email: this.email,
-    name: this.name
+    id: user._id,
+    email: user.email,
+    name: user.name,
+    role: user.role
   }
 
   return jwt.sign(payload, jwtSecret, {
@@ -36,4 +50,4 @@ userSchema.methods.generateJWT = function (user) {
 }
 
 const User = model('User', userSchema)
-module.exports = User
+module.exports = { User, generateJWT };
