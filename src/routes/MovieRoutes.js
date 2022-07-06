@@ -4,7 +4,6 @@ const Movie = require('../mongo/schemas/movie');
 
 
 const MovieRouter = express.Router();
-
 // · GET all Movies / !
 MovieRouter.get('/', async (request, response) => {
     const movies = await Movie.find({})
@@ -14,7 +13,6 @@ MovieRouter.get('/', async (request, response) => {
         response.status(500).json(error)
     }
 })
-
 
 // · GET by /:id!
 MovieRouter.get('/:id', async (request, response, next) => {
@@ -66,8 +64,8 @@ MovieRouter.delete('/:id', async (request, response) => {
 // · PUT!
 MovieRouter.patch('/:id', async (request, response) => {
     try {
-        const movie = await Movie.findByIdAndUpdate(request.params.id, request.body, {new: true});
-        if(!movie){
+        const movie = await Movie.findByIdAndUpdate(request.params.id, request.body, { new: true });
+        if (!movie) {
             response.status(404).send('No item found')
         }
         response.status(200).json(movie)
