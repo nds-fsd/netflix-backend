@@ -110,7 +110,7 @@ describe('User Router TEST', () => {
                 'Authorization': 'Bearer ' + generateJWT(normalUserToFailUpdate)
             }
         });
-        clea
+        
         it('ADMIN can update a USER', async () => {
             const res = await fakeRequest.patch(`/user/${normalUser._id}`).set(adminHeaders).send({
                 name: 'Jose Manuel2',
