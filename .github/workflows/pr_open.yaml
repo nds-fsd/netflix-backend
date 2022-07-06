@@ -9,6 +9,8 @@ jobs:
   build-test:
     name: Build & Test
     runs-on: ubuntu-latest
+    env:
+      JWT_SECRET: hardcoded_secret
     steps:
       - uses: actions/checkout@v2     # checkout the repo
       - run: npm install                   # install packages
