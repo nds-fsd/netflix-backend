@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --detectOpenHandles --coverage",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --detectOpenHandles --coverage ",
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js"
   },
@@ -27,6 +27,7 @@
     "express-jwt": "^7.7.5",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.6",
+    "nock": "^13.2.7",
     "passport": "^0.6.0"
   },
   "devDependencies": {

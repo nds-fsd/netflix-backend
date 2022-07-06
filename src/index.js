@@ -9,7 +9,7 @@ const {authRouter, jwtMW} = require('./routes/Auth');
 
 const cors = require('cors')
 const {connectDB} = require('./mongo')
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 app.use(cors())
 app.use(express.json())

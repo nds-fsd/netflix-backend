@@ -4,7 +4,6 @@ const Movie = require('../mongo/schemas/movie');
 
 
 const MovieRouter = express.Router();
-
 // · GET all Movies / !
 MovieRouter.get('/', async (request, response) => {
     const movies = await Movie.find({})
