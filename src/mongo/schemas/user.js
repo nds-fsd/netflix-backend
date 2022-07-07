@@ -18,6 +18,7 @@ const userSchema = new Schema({
     default: 'USER',
     requiere: true
   }
+  favs: [{type: String}]
 })
 
 userSchema.pre('save', function(next){
