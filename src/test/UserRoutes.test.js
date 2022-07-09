@@ -28,7 +28,6 @@ describe('User Router TEST', () => {
             'Authorization': 'Bearer ' + generateJWT(adminUser)
         }
     })
-
     let normalUser;
     let normalUserHeaders;
 
@@ -59,7 +58,6 @@ describe('User Router TEST', () => {
             expect(res.status).toBe(403);
         });
     });
-
     describe('GET /user', () => {
         it('ADMIN can get all USERS', async () => {
             const res = await fakeRequest.get('/user').set(adminHeaders);
@@ -72,7 +70,6 @@ describe('User Router TEST', () => {
 
         }
         );
-
         it('USER can get profile', async () => {
             const res = await fakeRequest.get(`/user/${normalUser._id}`).set(normalUserHeaders);
             expect(res.status).toBe(200);
@@ -87,7 +84,6 @@ describe('User Router TEST', () => {
         });
 
     });
-
     let normalUserToFailUpdate;
     let normalUsertoFailUpdateHeaders;
 
@@ -103,14 +99,13 @@ describe('User Router TEST', () => {
             expect(res.body.name).toBe('Pedro');
             expect(res.body.role).toBe('USER');
             expect(res.body.password).not.toBe('nuclio');
-            console.log(res.body);
             normalUserToFailUpdate = res.body;
             normalUsertoFailUpdateHeaders = {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + generateJWT(normalUserToFailUpdate)
             }
-        });
-        
+        })
+
         it('ADMIN can update a USER', async () => {
             const res = await fakeRequest.patch(`/user/${normalUser._id}`).set(adminHeaders).send({
                 name: 'Jose Manuel2',
@@ -119,7 +114,7 @@ describe('User Router TEST', () => {
             expect(res.body.name).toBe('Jose Manuel2');
             expect(res.body.role).toBe('USER');
             expect(res.body.password).not.toBe('nuclio');
-        });
+        })
 
         it('ADMIN can update his profile', async () => {
             const res = await fakeRequest.patch(`/user/${adminUser._id}`).set(adminHeaders).send({
@@ -129,7 +124,7 @@ describe('User Router TEST', () => {
             expect(res.body.name).toBe('Jose Manuel2');
             expect(res.body.role).toBe('ADMIN');
             expect(res.body.password).not.toBe('nuclio');
-        });
+        })
 
         it('User can update his profile', async () => {
             const res = await fakeRequest.patch(`/user/${normalUser._id}`).set(normalUserHeaders).send({
@@ -139,23 +134,23 @@ describe('User Router TEST', () => {
             expect(res.body.name).toBe('Jose Manuel2');
             expect(res.body.role).toBe('USER');
             expect(res.body.password).not.toBe('nuclio');
-        });
+        })
 
         it('User cant update other profile', async () => {
             const res = await fakeRequest.patch(`/user/${adminUser._id}`).set(normalUserHeaders).send({
                 name: 'Jose Manuel2',
             });
             expect(res.status).toBe(403);
-        });
-        
+        })
+
     });
 
     let normalUserToDelete;
     let normalUserToDeleteHeaders;
-    
+
 
     describe('DELETE /user', () => {
-        
+
         it('ADMIN create a dummy USER', async () => {
             const res = await fakeRequest.post('/user').set(adminHeaders).send({
                 name: 'Arian',
@@ -171,24 +166,62 @@ describe('User Router TEST', () => {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + generateJWT(normalUserToDelete)
             }
-        });
+        })
+
+        it('ADMIN can update a USER', async () => {
+            const res = await fakeRequest.patch(`/user/${normalUserToDelete._id}`).set(adminHeaders).send({
+                favs: ['62aa4330b220a5b8dbced19b'],
+            });
+            expect(res.status).toBe(200);
+            expect(res.body.favs[0]).toBe('62aa4330b220a5b8dbced19b');
+            expect(res.body.role).toBe('USER');
+            expect(res.body.password).not.toBe('nuclio');
+            normalUserToDelete = res.body;
+        })
 
         it('USER can delete his profile', async () => {
             const res = await fakeRequest.delete(`/user/${normalUser._id}`).set(normalUserHeaders);
             expect(res.status).toBe(204)
-        });
+        })
 
         it('USER can not delete other profile', async () => {
             const res = await fakeRequest.delete(`/user/${normalUserToDelete._id}`).set(normalUserHeaders);
             expect(res.status).toBe(403)
         })
 
+        it('ADMIN can delete a USER Fav Movie', async () => {
+            const res = await fakeRequest.delete(`/user/${normalUserToDelete._id}/favs/${normalUserToDelete.favs[0]}`).set(adminHeaders);
+            expect(res.status).toBe(204);
+        })
+
+        it('ADMIN can update a USER', async () => {
+            const res = await fakeRequest.patch(`/user/${normalUserToDelete._id}`).set(adminHeaders).send({
+                favs: ['62aa4330b220a5b8dbced19b'],
+            });
+            expect(res.status).toBe(200);
+            expect(res.body.favs[0]).toBe('62aa4330b220a5b8dbced19b');
+            expect(res.body.role).toBe('USER');
+            expect(res.body.password).not.toBe('nuclio');
+            normalUserToDelete = res.body;
+        })
+
+        it('USER can not delete a another USER Fav Movie', async () => {
+            const res = await fakeRequest.delete(`/user/${normalUserToDelete._id}/favs/${normalUserToDelete.favs[0]}`).set(normalUserHeaders);
+            expect(res.status).toBe(403);
+        })
+
+        it('USER can delete a Fav Movie', async () => {
+            console.log(`Estos son los datos del usuario: ${normalUserToDelete.favs[0]}`);
+            const res = await fakeRequest.delete(`/user/${normalUserToDelete._id}/favs/${normalUserToDelete.favs[0]}`).set(normalUserToDeleteHeaders);
+            expect(res.status).toBe(204);
+        })
+
         it('ADMIN can delete a user', async () => {
             const res = await fakeRequest.delete(`/user/${normalUserToDelete._id}`).set(adminHeaders);
             expect(res.status).toBe(204);
-        });
+        })
 
 
-});
+    });
 });
 
