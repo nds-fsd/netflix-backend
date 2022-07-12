@@ -15,22 +15,14 @@ MovieRouter.get('/', async (request, response) => {
 })
 
 // · GET by /:id!
-MovieRouter.get('/:id', async (request, response, next) => {
-    console.log(request.params.id)
+MovieRouter.get('/:id', async (request, response) => {
+    const id = request.params.id
     try {
-        const { id } = request.params
-        const movie = await Movie.findOne({
-            _id: id,
-        })
-
-        if (!movie) {
-            const error = new Error("Movie doesn't exist")
-            return next(error)
-        }
-
-        response.json(movie)
+        const movie = await Movie.findById(id);
+        if (!movie) return response.status(404).json({ message: 'No movie found' })
+        response.status(200).json(movie)
     } catch (error) {
-        next(error)
+        response.status(500).json(error)
     }
 })
 
