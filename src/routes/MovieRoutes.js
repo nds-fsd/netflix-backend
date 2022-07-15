@@ -6,7 +6,16 @@ const Movie = require('../mongo/schemas/movie');
 const MovieRouter = express.Router();
 // · GET all Movies / !
 MovieRouter.get('/', async (request, response) => {
-    const movies = await Movie.find({})
+    const {favs, name} = request.query;
+    let mongoQuery = {}; 
+    if (favs) {
+        const query = JSON.parse(favs);
+        mongoQuery["_id"] = {$in: query}
+    }
+    if (name) {
+        mongoQuery["title"] = {$regex: name }
+    }
+    const movies = await Movie.find(mongoQuery)
     try {
         response.send(movies)
     } catch (error) {
