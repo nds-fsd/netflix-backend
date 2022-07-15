@@ -103,7 +103,7 @@ UserRouter.delete('/:id/favs/:movieId', isAuthorized, async (request, response) 
         if (index === -1) return response.status(404).json({ message: 'No movie found' })
         user.favs.splice(index, 1)
         await user.save()
-        return response.status(204)
+        return response.status(204).json({ message: 'Movie deleted' })
     } catch (err) {
         return response.status(500).json({ message: err.message })
     }
