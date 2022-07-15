@@ -2,6 +2,7 @@ const express = require('express');
 const { User } = require('../mongo/schemas/user');
 const verifyToken = require('../helpers/verifyToken');
 const { isAdmin, isAuthorized, isUserOnTheDatabase } = require('../helpers/isAdmin');
+const { default: mongoose } = require('mongoose');
 
 
 const UserRouter = express.Router();
@@ -44,6 +45,37 @@ UserRouter.post('/', isAdmin, async (request, response) => {
     response.status(201).json(newUser)
 });
 
+// Añadir una pelicula nueva a los favs de un usuario
+UserRouter.post('/:id/favs', isAuthorized, async (request, response) => {
+    const id = request.params.id
+    const movieId = request.body.id
+    try {
+        const user = await User.findById(id)
+        if (!user) return response.status(404).json({ message: 'No user found' })
+        if(user.favs.includes(movieId)){
+            return response.status(400).json({ message: 'Movie already in favs' })
+        }
+        user.favs.push(movieId)
+        await user.save()
+        response.status(201).json(user)
+    } catch (error) {
+        response.status(500).json(error)
+    }
+})
+
+// - GET ALL FAVS OF ONE USER
+UserRouter.get('/:id/favs', isAuthorized, async (request, response) => {
+    const id = request.params.id
+    try {
+        const user = await User.findById(id)
+        if (!user) return response.status(404).json({ message: 'No user found' })
+        response.status(200).json(user.favs)
+    } catch (error) {
+        response.status(500).json(error)
+    }
+})
+
+
 // - DELETE ONE USER
 UserRouter.delete('/:id', async (request, response) => {
     const id = request.params.id
@@ -66,7 +98,6 @@ UserRouter.delete('/:id', async (request, response) => {
 UserRouter.delete('/:id/favs/:movieId', isAuthorized, async (request, response) => {
     const movieId = request.params.movieId
     const user = await User.findById(request.params.id)
-
     try {
         const index = user.favs.indexOf(movieId)
         if (index === -1) return response.status(404).json({ message: 'No movie found' })
