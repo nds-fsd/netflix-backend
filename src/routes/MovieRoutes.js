@@ -13,7 +13,7 @@ MovieRouter.get('/', async (request, response) => {
         mongoQuery["_id"] = {$in: query}
     }
     if (name) {
-        mongoQuery["prj_title"] = {$regex: name }
+        mongoQuery["title"] = {$regex: name }
     }
     const movies = await Movie.find(mongoQuery)
     try {
