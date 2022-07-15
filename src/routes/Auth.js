@@ -55,7 +55,7 @@ authRouter.post('/login', async (request, response) => {
                 id: user._id,
                 email: user.email,
                 name: user.name,
-                favs: user.favs
+                
             }
         })
     }
