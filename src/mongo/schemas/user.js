@@ -3,6 +3,7 @@ require('dotenv').config();
 const jwtSecret = process.env.JWT_SECRET
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+const UserRouter = require('../../routes/UserRoutes');
 
 
 //* This is related to the user register
@@ -17,7 +18,8 @@ const userSchema = new Schema({
     enum: ['ADMIN', 'USER'],
     default: 'USER',
     requiere: true
-  }
+  },
+  favs: [{type: Schema.ObjectId, ref: 'movie'}]
 })
 
 userSchema.pre('save', function(next){
