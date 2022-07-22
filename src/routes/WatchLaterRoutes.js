@@ -17,17 +17,18 @@ WatchLaterRouter.post(
     const id = request.params.id
     const movieId = request.body.id
     try {
-      const user = await User.findById(id)
-      if (!user) return response.status(404).json({ message: 'No user found' })
-      if (user.watchlater.includes(movieId)) {
+      const movieInList = await Watch.findOne({ user: id, movie: movieId })
+      if (movieInList) {
+        //TODO check what returns when findOne() doesn't find anything
         return response
           .status(400)
           .json({ message: 'Movie already in the list of watch later' })
       }
-      user.watchlater.push(movieId)
-      await user.save()
-      response.status(201).json(user)
+      const newWatchLater = new Watch({ user: id, movie: movieId })
+      await newWatchLater.save()
+      response.status(201).json(newWatchLater)
     } catch (error) {
+      console.log(error)
       response.status(500).json(error)
     }
   }

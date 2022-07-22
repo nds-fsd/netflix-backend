@@ -7,6 +7,7 @@ const {
   isUserOnTheDatabase,
 } = require('../helpers/isAdmin')
 const { default: mongoose } = require('mongoose')
+const WatchLaterRouter = require('./WatchLaterRoutes')
 
 const UserRouter = express.Router()
 
@@ -134,5 +135,5 @@ UserRouter.patch('/:id', isAuthorized, async (request, response) => {
     return response.status(500).json({ message: err.message })
   }
 })
-
+UserRouter.use(WatchLaterRouter)
 module.exports = UserRouter
