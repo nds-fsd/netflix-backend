@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 //* This is related to the movies list
 const MovieSchema = new Schema({
     urlImgMovie: { type: String, required: true },
-    urlImgModal: { type: String, require: true},
+    urlImgModal: { type: String, required: true},
     title: { type: String, required: true, unique: true },
     description: { type: String, required: true},
     rating: { type: String, required: true },

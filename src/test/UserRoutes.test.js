@@ -189,11 +189,6 @@ describe('User Router TEST', () => {
             expect(res.status).toBe(403)
         })
 
-        // it('ADMIN can delete a USER Fav Movie', async () => {
-        //     const res = await fakeRequest.delete(`/user/${normalUserToDelete._id}/favs/${normalUserToDelete.favs[0]}`).set(adminHeaders);
-        //     expect(res.status).toBe(204);
-        // })
-
         it('ADMIN can delete a USER FAV Movie', async () => {
             const res = await fakeRequest.delete(`/user/${normalUserToDelete._id}/favs/${normalUserToDelete.favs[0]}`).set(adminHeaders);
             expect(res.status).toBe(204);
