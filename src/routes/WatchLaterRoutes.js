@@ -41,9 +41,13 @@ WatchLaterRouter.get(
   async (request, response) => {
     const id = request.params.id
     try {
-      const user = await User.findById(id)
-      if (!user) return response.status(404).json({ message: 'No user found' })
-      response.status(200).json(user.watchlater)
+      const movieListed = await Watch.find({ user: id }).populate([
+        'user',
+        'movie',
+      ])
+      if (movieListed) {
+        response.status(200).json(movieListed)
+      }
     } catch (error) {
       response.status(500).json(error)
     }
@@ -55,15 +59,9 @@ WatchLaterRouter.delete(
   '/:id/watchlater/:movieId',
   isAuthorized,
   async (request, response) => {
-    const movieId = request.params.movieId
-    const user = await User.findById(request.params.id)
     try {
-      const index = user.watchlater.indexOf(movieId)
-      if (index === -1)
-        return response.status(404).json({ message: 'No movie found' })
-      user.watchlater.splice(index, 1)
-      await user.save()
-      return response.status(204).json({ message: 'Movie deleted' })
+      const result = await Watch.findOneAndDelete(request.params.movieId)
+      return response.status(200).json({ message: result })
     } catch (err) {
       return response.status(500).json({ message: err.message })
     }

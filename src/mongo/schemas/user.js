@@ -19,7 +19,6 @@ const userSchema = new Schema({
     requiere: true,
   },
   favs: [{ type: Schema.ObjectId, ref: 'movie' }],
-  watchlater: [{ type: Schema.ObjectId, ref: 'watchlater' }],
 })
 
 userSchema.pre('save', function (next) {
