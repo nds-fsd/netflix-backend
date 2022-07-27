@@ -17,7 +17,7 @@ MovieRouter.get('/', async (request, response) => {
   if (name) {
     mongoQuery['title'] = { $regex: name }
   }
-  const movies = await Movie.find(mongoQuery)
+  const movies = await Movie.find(mongoQuery).populate('category')
   try {
     response.send(movies)
   } catch (error) {

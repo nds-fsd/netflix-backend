@@ -15,7 +15,7 @@ const MovieSchema = new Schema({
   otherLanguagues: [{ type: String }],
   releaseDateTheaters: { type: Date, required: true },
   releaseDateStreaming: { type: Date, required: true },
-  category: { type: Schema.ObjectId, ref: 'category' },
+  category: { type: Schema.ObjectId, ref: 'Category' },
 })
 
 const Movie = model('movie', MovieSchema)
