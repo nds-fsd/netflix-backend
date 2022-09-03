@@ -22,7 +22,8 @@
         "sideBar.border": "#2f7c47",
         "statusBar.debuggingBackground": "#572146",
         "statusBar.debuggingForeground": "#e7e7e7",
-        "tab.activeBorder": "#2f7c47"
+        "tab.activeBorder": "#2f7c47",
+        "commandCenter.border": "#e7e7e799"
     },
     "peacock.color": "#215732"
 }
