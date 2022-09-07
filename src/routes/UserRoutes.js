@@ -72,14 +72,14 @@ UserRouter.post('/:id/favs', isAuthorized, async (request, response) => {
 
 // - GET ALL FAVS OF ONE USER
 UserRouter.get('/:id/favs', isAuthorized, async (request, response) => {
-  const id = request.params.id
-  try {
-    const user = await User.findById(id)
-    if (!user) return response.status(404).json({ message: 'No user found' })
-    response.status(200).json(user.favs)
-  } catch (error) {
-    response.status(500).json(error)
-  }
+    const id = request.params.id
+    try {
+        const user = await User.findById(id).populate('favs')
+        if (!user) return response.status(404).json({ message: 'No user found' })
+        response.status(200).json(user.favs)
+    } catch (error) {
+        response.status(500).json(error)
+    }
 })
 
 // - DELETE ONE USER

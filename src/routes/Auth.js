@@ -9,31 +9,33 @@ const { response } = require('express')
 const authRouter = express.Router()
 
 authRouter.post('/register', async (request, response) => {
-  try {
-    const emailExist = await User.findOne({ email: request.body.email })
-    if (emailExist) {
-      return response.status(400).json({
-        error: 'Email already exist',
-      })
+    try {
+        const emailExist = await User.findOne({ email: request.body.email })
+        if (emailExist) {
+            return response.status(400).json({
+                error: "Email already exist"
+            })
+        }
+        const user = new User(request.body);
+        await user.save();
+        const token = generateJWT(user);
+        return response.status(201).json({
+            token: token,
+            user: {
+                id: user._id,
+                email: user.email,
+                name: user.name,
+                role: user.role
+            }
+        })
     }
-    const user = new User(request.body)
-    await user.save()
-    const token = generateJWT(user)
-    return response.status(201).json({
-      token: token,
-      user: {
-        id: user._id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-      },
-    })
-  } catch (err) {
-    return response.status(500).json({
-      error: err.message,
-    })
-  }
-})
+    catch (err) {
+        return response.status(500).json({
+            error: err.message
+        })
+    }
+});
+
 
 authRouter.post('/login', async (request, response) => {
   try {
