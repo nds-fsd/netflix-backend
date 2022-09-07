@@ -67,7 +67,7 @@ UserRouter.post('/:id/favs', isAuthorized, async (request, response) => {
 UserRouter.get('/:id/favs', isAuthorized, async (request, response) => {
     const id = request.params.id
     try {
-        const user = await User.findById(id)
+        const user = await User.findById(id).populate('favs')
         if (!user) return response.status(404).json({ message: 'No user found' })
         response.status(200).json(user.favs)
     } catch (error) {

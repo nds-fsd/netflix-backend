@@ -25,7 +25,7 @@ authRouter.post('/register', async (request, response) => {
                 id: user._id,
                 email: user.email,
                 name: user.name,
-                favs: user.favs
+                role: user.role
             }
         })
     }
@@ -55,6 +55,7 @@ authRouter.post('/login', async (request, response) => {
                 id: user._id,
                 email: user.email,
                 name: user.name,
+                role: user.role
                 
             }
         })
