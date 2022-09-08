@@ -33,6 +33,15 @@ CategoriesRouter.get('/:id', async (request, response) => {
   }
 })
 
+CategoriesRouter.get('/', async (request, response) => {
+  try {
+    const categories = await Category.find()
+    response.status(200).json(categories)
+  } catch (error) {
+    response.status(500).json(error)
+  }
+})
+
 // · DELETE!
 CategoriesRouter.delete('/:id', isAuthorized, async (request, response) => {
   try {
