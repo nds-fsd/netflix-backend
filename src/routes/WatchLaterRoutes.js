@@ -60,8 +60,12 @@ WatchLaterRouter.delete(
   isAuthorized,
   async (request, response) => {
     try {
-      const result = await Watch.findOneAndDelete(request.params.movieId)
-      return response.status(200).json({ message: result })
+      const result = await Watch.findByIdAndRemove(request.params.movieId)
+      console.log(result)
+      console.log(request.params.movieId)
+      if (!result)
+        return response.status(500).json({ message: 'Movie not found' })
+      else return response.status(200).json({ message: result })
     } catch (err) {
       return response.status(500).json({ message: err.message })
     }
