@@ -1,10 +1,9 @@
 const { Schema, model } = require('mongoose')
-require('dotenv').config();
+require('dotenv').config()
 const jwtSecret = process.env.JWT_SECRET
-var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
-const UserRouter = require('../../routes/UserRoutes');
-
+var bcrypt = require('bcryptjs')
+var jwt = require('jsonwebtoken')
+const UserRouter = require('../../routes/UserRoutes')
 
 //* This is related to the user register
 const userSchema = new Schema({
@@ -17,22 +16,21 @@ const userSchema = new Schema({
     type: String,
     enum: ['ADMIN', 'USER'],
     default: 'USER',
-    requiere: true
+    requiere: true,
   },
-  favs: [{type: Schema.ObjectId, ref: 'movie'}]
+  favs: [{ type: Schema.ObjectId, ref: 'movie' }],
 })
 
-userSchema.pre('save', function(next){
-	if(!this.isModified('password')) return next();
-	const hash = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
-	this.password = hash;
-	next();
-});
-
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password')) return next()
+  const hash = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10))
+  this.password = hash
+  next()
+})
 
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password)
-};
+}
 
 const generateJWT = function (user) {
   const today = new Date()
@@ -43,13 +41,13 @@ const generateJWT = function (user) {
     id: user._id,
     email: user.email,
     name: user.name,
-    role: user.role
+    role: user.role,
   }
 
   return jwt.sign(payload, jwtSecret, {
-    expiresIn: parseInt(expirationDate.getTime() / 1000, 10)
+    expiresIn: parseInt(expirationDate.getTime() / 1000, 10),
   })
 }
 
 const User = model('User', userSchema)
-module.exports = { User, generateJWT };
+module.exports = { User, generateJWT }
