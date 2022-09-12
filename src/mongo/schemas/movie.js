@@ -4,6 +4,7 @@ const { Schema, model } = require('mongoose')
 const MovieSchema = new Schema({
   urlImgMovie: { type: String, required: true },
   urlImgModal: { type: String, require: true },
+  urlTrailer: { type: String, required: true },
   title: { type: String, required: true, unique: true },
   description: { type: String, required: true },
   rating: { type: String, required: true },
